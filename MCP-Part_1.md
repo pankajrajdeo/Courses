@@ -1,8 +1,4 @@
-Here are clear, structured **revision notes in English** based on the text you provided:
-
----
-
-# Revision Notes on MCP (Model Context Protocol)
+# MCP (Model Context Protocol)
 
 ## 1. Introduction
 
