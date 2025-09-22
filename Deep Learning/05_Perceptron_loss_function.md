@@ -1,7 +1,3 @@
-Here are **detailed lecture notes** based on your provided material. I’ve organized the content step by step, added clear structure, code snippets, and explanations, so you can use these notes directly for revision.
-
----
-
 # Lecture Notes: **Loss Functions in Perceptron**
 
 ---
@@ -247,7 +243,3 @@ print("Final Weights:", weights, "Bias:", bias)
 
 ✅ **Key Takeaway**:
 The perceptron isn’t limited to binary classification. By changing its components, it generalizes to multiple ML models. Loss functions are the backbone of this flexibility.
-
----
-
-Would you like me to also create **visual diagrams** (like the perceptron structure, hinge loss shape, and comparison of activation functions) to make your revision even easier?
