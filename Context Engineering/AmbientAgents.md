@@ -304,7 +304,3 @@ graph TD
 * **Human oversight** balances safety and autonomy.
 * **Memory turns an assistant into a personalized agent**.
 * The repo’s principles apply to **any agentic system** beyond email.
-
----
-
-Would you like me to create a **condensed one-page “cheat sheet”** version of these notes for quick revision, in addition to this detailed guide?
