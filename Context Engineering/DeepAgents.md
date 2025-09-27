@@ -19,6 +19,14 @@ They overcome the limitations of **shallow agents** (turn-by-turn, memoryless, p
 
 👉 Think of them as **project managers + researchers** rather than just chatbots.
 
+```mermaid
+graph TD
+    A[Deep Agent] --> B[Task Planning]
+    A --> C[Context Persistence]
+    A --> D[Context Isolation]
+    A --> E[Strategic Reflection]
+```
+
 ---
 
 ## 🏛️ II. The Three Pillars of Context Engineering
@@ -54,6 +62,13 @@ Deep agents rest on **three golden patterns**:
      * Comparisons → 1 per entity.
      * Multi-faceted tasks → parallel sub-agents.
 
+```mermaid
+flowchart LR
+    T[TODOs] --> S[Sub-agents]
+    S --> F[Files - Context Offloading]
+    F --> P[Parent Agent Synthesis]
+```
+
 **Synergy:**
 TODOs define tasks → Sub-agents execute them → Results offloaded to files → Parent integrates final synthesis.
 
@@ -85,6 +100,19 @@ Deep agents are implemented as **stateful cognitive systems**.
 * `InjectedState` → tools can read state.
 * `InjectedToolCallId` → tie tool output to triggering message.
 * Ensures clean continuity across tool calls.
+
+```mermaid
+classDiagram
+    class DeepAgentState {
+        +messages
+        +todos
+        +files
+    }
+    class Command {
+        +update
+    }
+    DeepAgentState <.. Command : updated by
+```
 
 ---
 
@@ -133,6 +161,16 @@ Tools are the “organs” of a deep agent.
   * Sub-agent executes independently.
   * Returns results as `ToolMessage` + merges files.
 
+```mermaid
+graph TD
+    subgraph Tools
+        T1[TODO Tools]
+        T2[File Tools]
+        T3[Research Tools]
+        T4[Sub-agent Tool]
+    end
+```
+
 ---
 
 ## 📜 V. Prompt Engineering & Context Strategy
@@ -168,6 +206,21 @@ Prompts act as **operating manuals** for the agent.
 * **Collision prevention**: UUID suffix for filenames.
 * **Extensibility**: Sub-agent factory allows domain-specific agents.
 
+```python
+@tool(description=WRITE_FILE_DESCRIPTION, parse_docstring=True)
+def write_file(file_path: str, content: str, state, tool_call_id):
+    files = state.get("files", {})
+    files[file_path] = content
+    return Command(
+        update={
+            "files": files,
+            "messages": [
+                ToolMessage(f"Updated file {file_path}", tool_call_id=tool_call_id)
+            ],
+        }
+    )
+```
+
 ---
 
 ## 🛠️ VII. Developer Practices
@@ -189,6 +242,24 @@ Prompts act as **operating manuals** for the agent.
 3. **Isolated research** → Each sub-agent uses Tavily search, saves results in VFS.
 4. **Merge** → Files + summaries returned, reducer merges them.
 5. **Synthesize** → Parent reads both files, writes comparative answer, marks TODOs completed.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant ParentAgent
+    participant SubAgent1 as SubAgent (OpenAI)
+    participant SubAgent2 as SubAgent (Anthropic)
+    participant VFS as Virtual File System
+
+    User->>ParentAgent: Query
+    ParentAgent->>ParentAgent: Create TODOs
+    ParentAgent->>SubAgent1: Delegate research
+    ParentAgent->>SubAgent2: Delegate research
+    SubAgent1->>VFS: Save results
+    SubAgent2->>VFS: Save results
+    ParentAgent->>VFS: Read results
+    ParentAgent->>User: Synthesized answer
+```
 
 ---
 
