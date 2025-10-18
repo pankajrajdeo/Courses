@@ -1,0 +1,1728 @@
+# Python Strings & Conditionals: Foundation for Biomedical AI
+
+## 🎯 Key Takeaways
+
+- **Strings** are sequences of characters—the fundamental data type for text processing in biomedical AI (patient records, genomic sequences, research papers)
+- **String indexing** starts at 0, enabling precise character access for DNA/protein sequence analysis
+- **Slicing** extracts subsequences—critical for genomic data manipulation and feature extraction
+- **Conditional statements** (if/elif/else) implement decision logic—the backbone of diagnostic algorithms and data filtering
+- **String methods** provide powerful text manipulation—essential for clinical NLP and literature mining
+
+---
+
+## 📋 Prerequisites Check
+
+**You Need to Know:**
+- ✅ Basic Python variables and data types (covered in previous lecture)
+- ✅ How to run Python code in an editor (VS Code)
+- ✅ Basic arithmetic operators
+
+**New Concepts Introduced:**
+- String manipulation and methods
+- Indexing and slicing
+- Conditional logic (if/elif/else)
+- Comparison and logical operators
+- Code indentation and structure
+
+---
+
+## 🧠 Intuitive Overview: Why This Matters for Biomedical AI
+
+### The Real-World Connection
+
+**In biomedical AI, you'll constantly work with:**
+
+1. **Genomic Sequences** (strings of A, T, G, C)
+   - Finding mutation sites = string searching
+   - Extracting gene regions = string slicing
+   - Sequence validation = conditional logic
+
+2. **Clinical Text** (patient notes, reports)
+   - Extracting patient age/symptoms = string parsing
+   - Classification decisions = conditionals
+   - Text preprocessing = string methods
+
+3. **Research Literature** (millions of papers)
+   - Keyword extraction = string manipulation
+   - Relevance filtering = conditional logic
+   - Data cleaning = string methods
+
+**Mental Model:** Think of strings as **biological sequences** or **clinical narratives** that you need to parse, analyze, and make decisions about. Conditionals are your **diagnostic logic** that routes data through different processing pathways.
+
+---
+
+## 🔤 Part 1: Strings - The Text Foundation
+
+### What Are Strings?
+
+A **string** is a data type that stores a sequence of characters—letters, numbers, symbols, or spaces.
+
+```python
+# Three ways to create strings
+string1 = "This is a string"        # Double quotes (most common)
+string2 = 'Python'                  # Single quotes
+string3 = """Multi-line string"""   # Triple quotes (for paragraphs)
+```
+
+**Biomedical Example:**
+```python
+dna_sequence = "ATCGATCGATCG"
+patient_name = "John Doe"
+diagnosis = "Type 2 Diabetes"
+```
+
+---
+
+### Why Three Quote Types?
+
+**Problem:** What if your text contains quotes?
+
+```python
+# ❌ This breaks - Python gets confused
+college = 'Ram's College'  # Syntax error!
+
+# ✅ Solution: Use different outer quotes
+college = "Ram's College"  # Works!
+quote = 'She said "Hello"'  # Works!
+```
+
+**Rule:** Use the quote type that doesn't appear in your text, or use triple quotes for complex text.
+
+---
+
+### Escape Sequences: Formatting Special Characters
+
+**Problem:** How do you add a new line or tab in a string?
+
+**Solution:** Escape sequences—special character codes starting with backslash (`\`)
+
+| Escape Sequence | Meaning | Example |
+|----------------|---------|---------|
+| `\n` | New line | `"Line 1\nLine 2"` |
+| `\t` | Tab space | `"Name:\tJohn"` |
+| `\\` | Backslash | `"C:\\Users"` |
+| `\"` | Quote | `"He said \"Hi\""` |
+
+```python
+string = "This is a string\nWe are creating it in Python"
+print(string)
+# Output:
+# This is a string
+# We are creating it in Python
+
+string_tab = "Name:\tJohn\nAge:\t25"
+print(string_tab)
+# Output:
+# Name:    John
+# Age:     25
+```
+
+**Biomedical Use Case:**
+```python
+report = "Patient: John Doe\nAge: 45\nDiagnosis: Hypertension\nBP: 140/90"
+print(report)
+# Formats clinical report with proper line breaks
+```
+
+---
+
+### String Operations
+
+#### 1. **Concatenation** (Joining Strings)
+
+Use `+` to combine strings:
+
+```python
+str1 = "Apna"
+str2 = "College"
+final = str1 + " " + str2  # "Apna College"
+```
+
+**Biomedical Example:**
+```python
+first_name = "John"
+last_name = "Doe"
+patient_id = "P12345"
+
+full_record = patient_id + ": " + first_name + " " + last_name
+print(full_record)  # "P12345: John Doe"
+```
+
+#### 2. **Length** (Counting Characters)
+
+```python
+text = "Python"
+length = len(text)  # 6
+```
+
+**Important:** Spaces, punctuation, and special characters ALL count!
+
+```python
+sentence = "Hello World"
+print(len(sentence))  # 11 (includes the space!)
+```
+
+**Biomedical Example:**
+```python
+dna = "ATCGATCG"
+sequence_length = len(dna)  # 8 base pairs
+
+# Check minimum sequence length for analysis
+if len(dna) >= 100:
+    print("Sequence long enough for alignment")
+```
+
+---
+
+## 🔢 String Indexing: Accessing Individual Characters
+
+**Mental Model:** Think of a string as a **numbered list** where each character has a position.
+
+### Positive Indexing (Left to Right)
+
+```python
+text = "PYTHON"
+#       012345  ← index numbers
+
+print(text[0])  # 'P' (first character)
+print(text[1])  # 'Y' (second character)
+print(text[5])  # 'N' (last character)
+```
+
+**Key Rule:** Indexing starts at **0**, not 1!
+
+### Negative Indexing (Right to Left)
+
+```python
+text = "PYTHON"
+#      -6-5-4-3-2-1  ← negative indices
+
+print(text[-1])  # 'N' (last character)
+print(text[-2])  # 'O' (second from last)
+print(text[-6])  # 'P' (first character)
+```
+
+**When to use negative indexing:** When you need to access characters from the end without knowing the string length.
+
+**Biomedical Example: DNA Sequence Analysis**
+```python
+dna = "ATCGATCGATCG"
+
+# Check first base
+if dna[0] == "A":
+    print("Sequence starts with Adenine")
+
+# Check last base (without knowing length)
+if dna[-1] == "G":
+    print("Sequence ends with Guanine")
+
+# Check specific position for mutation
+position_5 = dna[5]  # Check 6th base (index 5)
+if position_5 != "T":
+    print("Mutation detected at position 6")
+```
+
+### 🚫 Important Limitation: Strings Are Immutable
+
+**You CANNOT change characters using indexing:**
+
+```python
+text = "HELLO"
+text[0] = "J"  # ❌ ERROR: 'str' object does not support item assignment
+```
+
+**To "change" a string, create a new one:**
+```python
+text = "HELLO"
+text = "J" + text[1:]  # ✅ Creates "JELLO"
+```
+
+---
+
+## ✂️ String Slicing: Extracting Subsequences
+
+**Slicing** extracts a portion (substring) from a string.
+
+### Basic Syntax
+
+```python
+string[start:end]
+# Returns characters from 'start' up to (but NOT including) 'end'
+```
+
+**Critical Rule:** The `end` index is **excluded**!
+
+```python
+text = "PYTHON"
+#       012345
+
+print(text[1:4])   # "YTH" (indices 1, 2, 3 - NOT 4!)
+print(text[0:2])   # "PY"  (indices 0, 1)
+print(text[2:6])   # "THON" (indices 2, 3, 4, 5)
+```
+
+### Visual Guide to Slicing
+
+```python
+string = "Apna College"
+#         012345678901
+#         0         11
+
+string[0:4]   # "Apna" (0,1,2,3)
+string[5:12]  # "College" (5,6,7,8,9,10,11)
+string[1:4]   # "pna" (1,2,3)
+```
+
+### Shorthand Tricks
+
+```python
+text = "PYTHON"
+
+# Omit start → starts from beginning
+text[:3]      # "PYT" (same as text[0:3])
+
+# Omit end → goes to the end
+text[2:]      # "THON" (same as text[2:6] or text[2:len(text)])
+
+# Both omitted → entire string
+text[:]       # "PYTHON" (makes a copy)
+```
+
+### Negative Slicing
+
+```python
+text = "PYTHON"
+#      -6-5-4-3-2-1
+
+text[-3:-1]   # "HO" (indices -3, -2, excludes -1)
+text[-5:-2]   # "YTH"
+text[-4:]     # "THON" (from -4 to end)
+```
+
+### 🧬 Biomedical Application: Genomic Sequence Extraction
+
+```python
+# Full genomic sequence
+genome = "ATCGATCGATCGAAATTTGGGCCCAAATTTGGG"
+
+# Extract specific gene region (bases 10-20)
+gene_region = genome[10:20]
+print(f"Gene region: {gene_region}")
+
+# Extract promoter region (first 5 bases)
+promoter = genome[:5]
+print(f"Promoter: {promoter}")
+
+# Extract last 10 bases
+terminator = genome[-10:]
+print(f"Terminator: {terminator}")
+
+# Extract codon (3 bases at position 15)
+start_position = 15
+codon = genome[start_position:start_position+3]
+print(f"Codon at position {start_position}: {codon}")
+```
+
+**Pattern for extracting fixed-length subsequences:**
+```python
+# Extract n characters starting at position i
+subsequence = string[i:i+n]
+```
+
+---
+
+## 🛠️ Essential String Methods
+
+Methods are **built-in functions** that operate on strings. Think of them as **tools** for text manipulation.
+
+### Method Syntax
+
+```python
+string.method_name(arguments)
+```
+
+### 1. `endswith()` - Check Ending
+
+**What it does:** Returns `True` if string ends with specified substring, otherwise `False`.
+
+```python
+text = "I am studying Python from Apna College"
+
+print(text.endswith("ege"))     # True
+print(text.endswith("Python"))  # False (ends with "College")
+```
+
+**Biomedical Use:**
+```python
+filename = "patient_data_2024.csv"
+
+if filename.endswith(".csv"):
+    print("Valid CSV file")
+    # Process CSV data
+    
+gene_id = "BRCA1_HUMAN"
+if gene_id.endswith("_HUMAN"):
+    print("Human gene identified")
+```
+
+---
+
+### 2. `capitalize()` - Capitalize First Letter
+
+**What it does:** Returns a new string with the first character capitalized.
+
+```python
+text = "python is awesome"
+new_text = text.capitalize()
+print(new_text)  # "Python is awesome"
+```
+
+**Important:** Returns a **new** string; doesn't modify the original!
+
+```python
+text = "hello"
+text.capitalize()  # Creates new string but doesn't save it
+print(text)        # Still "hello"
+
+# To keep the change:
+text = text.capitalize()
+print(text)        # "Hello"
+```
+
+**Biomedical Use:**
+```python
+# Standardize patient names
+patient_name = "john doe"
+formatted_name = patient_name.capitalize()  # "John doe"
+
+# Better: use title() for full names
+formatted_name = patient_name.title()  # "John Doe"
+```
+
+---
+
+### 3. `replace()` - Replace Substrings
+
+**What it does:** Replaces **all occurrences** of old substring with new substring.
+
+```python
+text = "I am studying Python from Apna College"
+
+# Replace single character
+new_text = text.replace("o", "a")
+print(new_text)  # "I am studying Pythan fram Apna Callege"
+
+# Replace word
+new_text = text.replace("Python", "JavaScript")
+print(new_text)  # "I am studying JavaScript from Apna College"
+```
+
+**Biomedical Use:**
+```python
+# Standardize DNA notation
+sequence = "atcgatcg"
+standardized = sequence.replace("t", "T").replace("a", "A")
+print(standardized)  # "ATCGATCG"
+
+# Clean clinical notes
+note = "Patient has HTN and DM"
+expanded = note.replace("HTN", "Hypertension").replace("DM", "Diabetes")
+print(expanded)  # "Patient has Hypertension and Diabetes"
+
+# Remove unwanted characters
+messy_sequence = "ATC-GAT-CG"
+clean_sequence = messy_sequence.replace("-", "")
+print(clean_sequence)  # "ATCGATCG"
+```
+
+---
+
+### 4. `find()` - Search for Substring
+
+**What it does:** Returns the **starting index** of the first occurrence, or `-1` if not found.
+
+```python
+text = "I am studying Python from Apna College"
+
+print(text.find("o"))        # 18 (first 'o' in "Python")
+print(text.find("Python"))   # 14 (start of word "Python")
+print(text.find("q"))        # -1 (not found)
+```
+
+**Key Point:** Returns `-1` (not an error!) when substring is not found.
+
+**Biomedical Use:**
+```python
+# Find mutation site in DNA
+dna = "ATCGATCGATCGAAATTTGGG"
+mutation_marker = "AAA"
+
+position = dna.find(mutation_marker)
+if position != -1:
+    print(f"Mutation found at position {position}")
+    print(f"Context: {dna[position-5:position+8]}")
+else:
+    print("No mutation detected")
+
+# Search patient record for keyword
+record = "Patient presents with fever, cough, and fatigue"
+if record.find("fever") != -1:
+    print("Fever symptom detected")
+```
+
+---
+
+### 5. `count()` - Count Occurrences
+
+**What it does:** Returns the number of times a substring appears.
+
+```python
+text = "I am studying Python from Apna College from home"
+
+print(text.count("from"))  # 2
+print(text.count("o"))     # 4 (in Python, from, College, from)
+```
+
+**Biomedical Use:**
+```python
+# Count bases in DNA sequence
+dna = "ATCGATCGATCGAAATTTGGG"
+
+adenine_count = dna.count("A")
+thymine_count = dna.count("T")
+gc_count = dna.count("G") + dna.count("C")
+
+print(f"A: {adenine_count}, T: {thymine_count}")
+print(f"GC content: {gc_count / len(dna) * 100:.1f}%")
+
+# Count symptom mentions in clinical notes
+notes = "Patient reports headache. Headache persists. Mild headache today."
+headache_mentions = notes.lower().count("headache")
+print(f"Headache mentioned {headache_mentions} times")
+```
+
+---
+
+### 📚 More Useful String Methods
+
+```python
+# Case conversion
+text = "Python Programming"
+text.upper()      # "PYTHON PROGRAMMING"
+text.lower()      # "python programming"
+text.title()      # "Python Programming"
+
+# Whitespace removal
+text = "  hello  "
+text.strip()      # "hello" (removes leading/trailing spaces)
+text.lstrip()     # "hello  " (left only)
+text.rstrip()     # "  hello" (right only)
+
+# Checking content
+"123".isdigit()   # True (all digits)
+"abc".isalpha()   # True (all letters)
+"abc123".isalnum() # True (letters or digits)
+
+# Splitting and joining
+"a,b,c".split(",")        # ['a', 'b', 'c']
+"-".join(['a','b','c'])   # "a-b-c"
+```
+
+---
+
+## 🎓 Practice: String Problems
+
+### Problem 1: Input Name and Print Length
+
+```python
+# Solution
+name = input("Enter your name: ")
+print(f"Length of your name is {len(name)}")
+
+# Example run:
+# Enter your name: Shraddha
+# Length of your name is 8
+```
+
+### Problem 2: Count Dollar Signs
+
+```python
+# Solution
+string = "Hi I am the $ symbol $$ 99. **Nesting**: Conditionals within conditionals
+
+### 🔄 Concepts Reinforced:
+- Variables and data types (from Lecture 1)
+- Input/output operations
+- Type casting (`int()`, `str()`)
+
+---
+
+## 🚀 Next Steps: Your Learning Path
+
+### Immediate Practice (Do This Now!)
+
+1. **String Manipulation Drills**
+   ```python
+   # Practice these patterns:
+   
+   # Pattern 1: Extract specific positions
+   sequence = "ATCGATCGATCG"
+   # Extract positions 3-7
+   # Extract last 4 characters
+   # Extract every other character
+   
+   # Pattern 2: Search and validate
+   text = "Patient has diabetes and hypertension"
+   # Find position of "diabetes"
+   # Count how many conditions mentioned
+   # Check if "fever" is mentioned
+   
+   # Pattern 3: Clean and standardize
+   messy_data = "  john doe  , 45 , male  "
+   # Remove extra spaces
+   # Standardize case
+   # Split into components
+   ```
+
+2. **Conditional Logic Challenges**
+   ```python
+   # Challenge 1: BMI Calculator with categories
+   # Input: weight (kg), height (m)
+   # Output: BMI and category (underweight/normal/overweight/obese)
+   
+   # Challenge 2: Drug dosage calculator
+   # Input: age, weight, kidney function
+   # Output: adjusted dose based on multiple factors
+   
+   # Challenge 3: Symptom checker
+   # Input: list of symptoms
+   # Output: possible conditions (simplified)
+   ```
+
+3. **Homework Problem: Greatest of 4 Numbers**
+   ```python
+   # Write a program to find the largest of 4 numbers
+   # Hint: Extend the logic from "greatest of 3"
+   # Think about the decision tree:
+   #   - If a is largest...
+   #   - Else if b is largest...
+   #   - Else if c is largest...
+   #   - Else d must be largest
+   
+   a = int(input("First number: "))
+   b = int(input("Second number: "))
+   c = int(input("Third number: "))
+   d = int(input("Fourth number: "))
+   
+   # Your code here...
+   ```
+
+---
+
+### Building Toward Biomedical AI
+
+**Week 1-2: Foundation**
+- ✅ Variables, data types (Done)
+- ✅ Strings and conditionals (Done - this lecture)
+- ⬜ Loops (Next lecture - critical for processing large datasets)
+- ⬜ Lists and data structures
+- ⬜ Functions (code reusability)
+
+**Week 3-4: Data Processing**
+- ⬜ File I/O (reading CSV, text files)
+- ⬜ Working with libraries (NumPy, Pandas)
+- ⬜ Data cleaning and preprocessing
+- ⬜ Regular expressions (advanced text patterns)
+
+**Week 5-8: ML Foundations**
+- ⬜ Statistical concepts in Python
+- ⬜ Scikit-learn basics
+- ⬜ Model training and evaluation
+- ⬜ Feature engineering
+
+**Month 3+: Biomedical Specialization**
+- ⬜ BioPython (genomic data)
+- ⬜ Medical NLP (clinical text)
+- ⬜ Image processing (medical imaging)
+- ⬜ LangChain/LlamaIndex (RAG systems)
+- ⬜ Fine-tuning LLMs on biomedical data
+
+---
+
+## 📚 Recommended Learning Resources
+
+### For Python Fundamentals
+- **Python.org Tutorial** - Official documentation
+- **Real Python** - Practical tutorials
+- **Automate the Boring Stuff** - Practical applications
+
+### For Biomedical Python
+- **BioPython Tutorial** - Genomic sequence analysis
+- **PubMed API** - Accessing research papers
+- **scikit-bio** - Biological data structures
+- **MedCAT** - Medical concept extraction
+
+### For Biomedical AI/ML
+- **Stanford CS230 (Deep Learning)** - Foundations
+- **Fast.ai** - Practical deep learning
+- **Papers with Code** - Latest research implementations
+- **Hugging Face Transformers** - Pre-trained biomedical models
+
+---
+
+## 🔍 Deep Dive: Why These Concepts Matter
+
+### String Processing in Biomedical Context
+
+**1. Genomic Data is Strings**
+```python
+# Real scenario: Find all start codons in sequence
+dna = "ATGATCGATGATGAAATTTGGG"
+start_codon = "ATG"
+
+position = 0
+start_positions = []
+
+while position < len(dna):
+    pos = dna.find(start_codon, position)
+    if pos == -1:
+        break
+    start_positions.append(pos)
+    position = pos + 1
+
+print(f"Start codons at positions: {start_positions}")
+# Output: [0, 6, 12] - three potential gene starts
+```
+
+**2. Clinical Notes are Unstructured Text**
+```python
+# Real scenario: Extract key information
+note = """
+Patient: John Doe, 45yo male
+CC: Chest pain, SOB
+PMH: HTN, DM2
+Meds: Metformin 1000mg BID, Lisinopril 10mg daily
+"""
+
+# Extract age
+age_start = note.find("45yo")
+if age_start != -1:
+    age = int(note[age_start:age_start+2])
+    print(f"Age: {age}")
+
+# Check for diabetes
+if "DM2" in note or "diabetes" in note.lower():
+    print("Diabetes documented")
+```
+
+**3. Research Paper Processing**
+```python
+# Real scenario: Filter relevant papers
+abstract = """
+We investigated the efficacy of Drug-X in treating 
+COVID-19 patients. Results showed 45% reduction in 
+hospitalization rates (p<0.001).
+"""
+
+# Check if paper is relevant to your research
+keywords = ["COVID-19", "drug efficacy", "hospitalization"]
+relevance_score = sum(1 for kw in keywords if kw.lower() in abstract.lower())
+
+if relevance_score >= 2:
+    print(f"Highly relevant paper (score: {relevance_score}/3)")
+    
+    # Extract p-value
+    p_pos = abstract.find("p<")
+    if p_pos != -1:
+        p_value_str = abstract[p_pos+2:p_pos+7]
+        print(f"Significance: p<{p_value_str}")
+```
+
+---
+
+### Conditionals: The Logic of Medicine
+
+**Medicine is inherently conditional:**
+- "**If** temperature > 100.4°F **and** patient is immunocompromised, **then** start broad-spectrum antibiotics"
+- "**If** troponin elevated **and** ECG shows ST changes, **then** suspect MI"
+- "**If** patient age > 50 **and** family history positive, **then** increase screening frequency"
+
+**Your code will encode clinical decision rules:**
+
+```python
+# Real clinical decision support system (simplified)
+def assess_sepsis_risk(temp, heart_rate, wbc_count, blood_pressure):
+    """
+    SIRS criteria for sepsis screening
+    """
+    sirs_criteria = 0
+    
+    # Temperature criterion
+    if temp > 38 or temp < 36:
+        sirs_criteria += 1
+        
+    # Heart rate criterion
+    if heart_rate > 90:
+        sirs_criteria += 1
+        
+    # WBC criterion
+    if wbc_count > 12000 or wbc_count < 4000:
+        sirs_criteria += 1
+        
+    # Respiratory rate would be checked here...
+    
+    if sirs_criteria >= 2:
+        if blood_pressure < 90:
+            return "SEPTIC SHOCK - IMMEDIATE INTERVENTION"
+        else:
+            return "SEPSIS - URGENT EVALUATION"
+    else:
+        return "Monitor for infection"
+
+# Example usage
+result = assess_sepsis_risk(
+    temp=39.2,           # High fever
+    heart_rate=105,      # Tachycardic
+    wbc_count=15000,     # Elevated WBC
+    blood_pressure=110   # BP okay
+)
+print(result)  # "SEPSIS - URGENT EVALUATION"
+```
+
+---
+
+## 🧪 Advanced String Techniques (Preview)
+
+### Regular Expressions (Coming Soon)
+
+While basic string methods work for simple patterns, **regular expressions** handle complex patterns:
+
+```python
+import re
+
+# Extract all email addresses from text
+text = "Contact: john@hospital.org or jane@clinic.com"
+emails = re.findall(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
+# ['john@hospital.org', 'jane@clinic.com']
+
+# Extract all patient IDs (pattern: P followed by 6 digits)
+notes = "Patient P123456 and P789012 were seen today"
+patient_ids = re.findall(r'P\d{6}', notes)
+# ['P123456', 'P789012']
+
+# Validate phone numbers
+phone = "(555) 123-4567"
+if re.match(r'\(\d{3}\) \d{3}-\d{4}', phone):
+    print("Valid phone format")
+```
+
+**When you need regex:** 
+- Complex patterns (emails, phone numbers, medical record numbers)
+- Flexible matching (date formats, measurement units)
+- Data validation (structured fields)
+
+---
+
+## 🎨 Code Style: Indentation Deep Dive
+
+### Why Python Uses Indentation
+
+**Other languages** (Java, C++, JavaScript):
+```java
+if (age >= 18) {
+    System.out.println("Can vote");
+    System.out.println("Can drive");
+}
+```
+
+**Python** (cleaner, more readable):
+```python
+if age >= 18:
+    print("Can vote")
+    print("Can drive")
+```
+
+**The rule:** All code at the same indentation level belongs together.
+
+```python
+if condition:
+    # These are all part of the 'if' block
+    statement1
+    statement2
+    statement3
+# This is OUTSIDE the 'if' block (back to original level)
+always_runs
+```
+
+### Indentation Errors to Watch For
+
+```python
+# ❌ WRONG - Inconsistent indentation
+if age >= 18:
+    print("Can vote")
+      print("Can drive")  # Extra spaces - Error!
+
+# ❌ WRONG - Missing indentation
+if age >= 18:
+print("Can vote")  # Not indented - Error!
+
+# ❌ WRONG - Unexpected indentation
+x = 5
+    y = 10  # Why is this indented? - Error!
+
+# ✅ CORRECT - Consistent 4-space indentation
+if age >= 18:
+    print("Can vote")
+    print("Can drive")
+    if has_license:
+        print("Can drive alone")
+```
+
+**Pro tip:** Configure your editor to show invisible characters (spaces, tabs) to catch indentation issues.
+
+---
+
+## 🔬 Biomedical AI Use Case: Complete Example
+
+### Building a Simple Clinical Decision Support Tool
+
+```python
+"""
+Diabetes Risk Assessment Tool
+Based on simplified clinical guidelines
+"""
+
+print("=== DIABETES RISK ASSESSMENT ===\n")
+
+# Collect patient data
+age = int(input("Patient age: "))
+bmi = float(input("BMI: "))
+family_history = input("Family history of diabetes? (yes/no): ").lower()
+physical_activity = input("Physically active? (yes/no): ").lower()
+blood_glucose = int(input("Fasting blood glucose (mg/dL): "))
+
+# Calculate risk score
+risk_score = 0
+
+# Age factor
+if age >= 45:
+    risk_score += 2
+    print("• Age ≥45: +2 points")
+
+# BMI factor
+if bmi >= 30:
+    risk_score += 3
+    print("• BMI ≥30 (Obese): +3 points")
+elif bmi >= 25:
+    risk_score += 1
+    print("• BMI 25-30 (Overweight): +1 point")
+
+# Family history
+if family_history == "yes":
+    risk_score += 2
+    print("• Family history: +2 points")
+
+# Physical activity
+if physical_activity == "no":
+    risk_score += 1
+    print("• Sedentary lifestyle: +1 point")
+
+# Blood glucose (most important)
+if blood_glucose >= 126:
+    print("⚠️ DIAGNOSTIC: Fasting glucose ≥126 suggests diabetes")
+    print("→ Refer for confirmatory testing")
+elif blood_glucose >= 100:
+    risk_score += 3
+    print("• Prediabetic range (100-125): +3 points")
+
+print(f"\nTotal Risk Score: {risk_score}")
+
+# Risk interpretation
+if blood_glucose >= 126:
+    recommendation = "IMMEDIATE referral to endocrinology"
+elif risk_score >= 6:
+    recommendation = "HIGH RISK - Schedule glucose tolerance test"
+elif risk_score >= 3:
+    recommendation = "MODERATE RISK - Lifestyle counseling and recheck in 6 months"
+else:
+    recommendation = "LOW RISK - Continue routine screening"
+
+print(f"\n📋 Recommendation: {recommendation}")
+
+# Generate patient education points
+print("\n📖 Patient Education:")
+if bmi >= 25:
+    print("  - Weight loss of 5-10% can significantly reduce risk")
+if physical_activity == "no":
+    print("  - Aim for 150 minutes of moderate exercise per week")
+if blood_glucose >= 100:
+    print("  - Reduce refined carbohydrates and added sugars")
+    print("  - Increase fiber intake (vegetables, whole grains)")
+```
+
+**Sample Output:**
+```
+=== DIABETES RISK ASSESSMENT ===
+
+Patient age: 52
+BMI: 28.5
+Family history of diabetes? (yes/no): yes
+Physically active? (yes/no): no
+Fasting blood glucose (mg/dL): 108
+
+• Age ≥45: +2 points
+• BMI 25-30 (Overweight): +1 point
+• Family history: +2 points
+• Sedentary lifestyle: +1 point
+• Prediabetic range (100-125): +3 points
+
+Total Risk Score: 9
+
+📋 Recommendation: HIGH RISK - Schedule glucose tolerance test
+
+📖 Patient Education:
+  - Weight loss of 5-10% can significantly reduce risk
+  - Aim for 150 minutes of moderate exercise per week
+  - Reduce refined carbohydrates and added sugars
+  - Increase fiber intake (vegetables, whole grains)
+```
+
+---
+
+## 🎯 Key Patterns to Remember
+
+### Pattern 1: Range Checking
+```python
+# Checking if value is in a range
+if 18 <= age <= 65:
+    # Equivalent to: age >= 18 and age <= 65
+    print("Working age")
+```
+
+### Pattern 2: Membership Testing
+```python
+# Check if item is in a collection
+valid_bases = "ATCG"
+if base in valid_bases:
+    print("Valid DNA base")
+
+# Multiple options
+if status in ["active", "pending", "review"]:
+    print("In progress")
+```
+
+### Pattern 3: Default Values with Else
+```python
+# Always have a fallback
+if condition1:
+    result = "Option A"
+elif condition2:
+    result = "Option B"
+else:
+    result = "Default"  # Always defined
+```
+
+### Pattern 4: Early Exit (Guard Clauses)
+```python
+# Check invalid conditions first
+if len(sequence) < 10:
+    print("Error: Sequence too short")
+    # exit or return here
+elif not sequence:
+    print("Error: Empty sequence")
+    # exit or return here
+else:
+    # Main processing here
+    process_sequence(sequence)
+```
+
+---
+
+## 🚀 From Here to LLM Fine-tuning
+
+**The path forward:**
+
+1. **Current Level** (Week 1-2)
+   - Basic syntax, strings, conditionals ✅
+   - Understanding data types and control flow
+
+2. **Data Structures** (Week 3-4)
+   - Lists, dictionaries, tuples → Essential for managing datasets
+   - File I/O → Reading medical records, genomic files
+
+3. **Functions & Modules** (Week 5-6)
+   - Code organization → Building reusable components
+   - Libraries → NumPy, Pandas for data analysis
+
+4. **Object-Oriented Programming** (Week 7-8)
+   - Classes and objects → Structuring complex systems
+   - Understanding library APIs
+
+5. **Data Science Stack** (Month 3)
+   - Pandas → Clinical data analysis
+   - NumPy → Numerical computations
+   - Matplotlib → Visualizations
+
+6. **Machine Learning Basics** (Month 4)
+   - Scikit-learn → Traditional ML models
+   - Feature engineering → Preparing biomedical data
+   - Model evaluation → Metrics for healthcare
+
+7. **Deep Learning** (Month 5-6)
+   - PyTorch/TensorFlow → Neural networks
+   - Transformers architecture → Understanding LLMs
+   - Transfer learning → Fine-tuning pre-trained models
+
+8. **Biomedical LLMs** (Month 6+)
+   - Hugging Face ecosystem → BioGPT, PubMedBERT
+   - LangChain → Building RAG systems
+   - Fine-tuning → Adapting models to medical domains
+   - Evaluation → Clinical validation metrics
+
+**Every concept you're learning now** (strings, conditionals, loops next) **is foundational** to everything above. You're building the vocabulary to speak to machines about medicine.
+
+---
+
+## 💎 Final Thoughts: The Mindset
+
+### Don't Memorize—Understand Patterns
+
+You don't need to memorize every string method. You need to understand:
+- "I need to search for text" → `find()` or `in`
+- "I need to count occurrences" → `count()`
+- "I need to change text" → `replace()`
+- "I need to make a decision" → `if/elif/else`
+
+**When you forget syntax:** Google is your friend. Even experienced developers look up syntax daily.
+
+**What matters:** Understanding the logic and patterns.
+
+### Practice With Real Problems
+
+Don't just do toy examples. Work with real biomedical scenarios:
+- Download a sample DNA sequence (NCBI database)
+- Find a clinical note template and parse it
+- Process a list of patient records (anonymized)
+- Build a simple symptom checker
+
+### Code Every Day
+
+**Better:** 30 minutes daily
+**Worse:** 5 hours once a week
+
+Consistency builds intuition. Your brain needs time to internalize patterns.
+
+---
+
+## ✅ Summary Checklist
+
+**Can you do these without looking?**
+
+- [ ] Create a string with quotes inside it
+- [ ] Use `\n` to create multi-line output
+- [ ] Concatenate strings with `+`
+- [ ] Find the length of a string
+- [ ] Access the first and last character of a string
+- [ ] Extract a substring using slicing
+- [ ] Use `find()` to locate text
+- [ ] Use `count()` to count occurrences
+- [ ] Use `replace()` to change text
+- [ ] Write an if/elif/else statement
+- [ ] Combine conditions with `and` and `or`
+- [ ] Check if a number is in a range
+- [ ] Determine if a number is odd or even
+- [ ] Find the maximum of multiple values
+
+**If you checked all boxes:** You're ready for the next lecture (Loops)!
+
+**If you missed some:** Review those sections and practice the exercises.
+
+---
+
+## 📖 Quick Reference Card
+
+### String Operations
+```python
+s = "Hello World"
+len(s)              # 11 - length
+s[0]                # 'H' - first char
+s[-1]               # 'd' - last char
+s[0:5]              # "Hello" - slice
+s.find("World")     # 6 - position
+s.count("l")        # 3 - occurrences
+s.replace("o", "0") # "Hell0 W0rld"
+s.upper()           # "HELLO WORLD"
+s.lower()           # "hello world"
+s.strip()           # Remove whitespace
+"x" in s            # False - membership
+```
+
+### Conditionals
+```python
+if condition:
+    code
+elif condition:
+    code
+else:
+    code
+
+# Comparisons: == != > < >= <=
+# Logical: and or not
+# Ranges: 10 <= x <= 20
+# Membership: x in [1,2,3]
+```
+
+**Next Up:** Loops (for, while) - automating repetitive tasks for large-scale data processing! 🔄99"
+dollar_count = string.count("$")
+print(dollar_count)  # Output: 3
+```
+
+---
+
+## 🔀 Part 2: Conditional Statements - Decision Logic
+
+### The Foundation of All Algorithms
+
+**Mental Model:** Conditionals are **decision trees** that route your program down different paths based on conditions.
+
+In biomedical AI:
+- **Diagnostic algorithms**: If symptoms X and Y, then diagnosis Z
+- **Data filtering**: If age > 18, include in adult cohort
+- **Quality control**: If sequence length < 100, reject sample
+
+---
+
+### Basic Syntax
+
+```python
+if condition:
+    # Code runs if condition is True
+    statement1
+    statement2
+```
+
+**Key Rules:**
+1. Condition must evaluate to `True` or `False`
+2. Colon `:` is required after condition
+3. **Indentation** (4 spaces or 1 tab) is MANDATORY
+4. All indented code runs together when condition is True
+
+---
+
+### Comparison Operators
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `==` | Equal to | `x == 5` |
+| `!=` | Not equal to | `x != 5` |
+| `>` | Greater than | `x > 5` |
+| `<` | Less than | `x < 5` |
+| `>=` | Greater than or equal | `x >= 5` |
+| `<=` | Less than or equal | `x <= 5` |
+
+---
+
+### Example 1: Simple If Statement
+
+```python
+age = 21
+
+if age >= 18:
+    print("Can vote")
+    print("Can apply for license")
+
+# Output (age=21):
+# Can vote
+# Can apply for license
+
+# Output (age=16):
+# (nothing printed)
+```
+
+---
+
+### `elif` - Multiple Conditions
+
+**Read as:** "else if" - checks another condition if previous was False.
+
+```python
+light = "green"
+
+if light == "red":
+    print("Stop")
+elif light == "green":
+    print("Go")
+elif light == "yellow":
+    print("Wait")
+
+print("End of code")
+```
+
+**How it works:**
+1. Check `if light == "red"` → False, skip
+2. Check `elif light == "green"` → **True**, execute and STOP
+3. Skip remaining elif blocks
+4. Continue with code after all conditions
+
+**Key Difference: `if` vs `elif`**
+
+```python
+num = 5
+
+# Using 'if' - BOTH execute
+if num > 2:
+    print("Greater than 2")  # Executes
+if num > 3:
+    print("Greater than 3")  # Also executes
+
+# Using 'elif' - ONLY FIRST executes
+if num > 2:
+    print("Greater than 2")  # Executes
+elif num > 3:
+    print("Greater than 3")  # Skipped!
+```
+
+---
+
+### `else` - The Catch-All
+
+**Read as:** "Otherwise" - runs if ALL previous conditions were False.
+
+```python
+age = 16
+
+if age >= 18:
+    print("Can vote")
+else:
+    print("Cannot vote")
+
+# Output: Cannot vote
+```
+
+**Complete Structure:**
+
+```python
+if condition1:
+    # Runs if condition1 is True
+elif condition2:
+    # Runs if condition1 is False AND condition2 is True
+elif condition3:
+    # Runs if condition1 and condition2 are False AND condition3 is True
+else:
+    # Runs if ALL above conditions are False
+```
+
+---
+
+### Logical Operators: Combining Conditions
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `and` | Both must be True | `age >= 18 and age < 65` |
+| `or` | At least one must be True | `x == 5 or x == 10` |
+| `not` | Inverts True/False | `not (x > 5)` |
+
+**Truth Tables:**
+
+```python
+# AND - both must be True
+True and True   → True
+True and False  → False
+False and True  → False
+False and False → False
+
+# OR - at least one must be True
+True or True    → True
+True or False   → True
+False or True   → True
+False or False  → False
+
+# NOT - inverts
+not True  → False
+not False → True
+```
+
+---
+
+### 🧬 Biomedical Example: Grading System
+
+```python
+marks = int(input("Enter student marks: "))
+
+if marks >= 90:
+    grade = "A"
+elif marks >= 80 and marks < 90:
+    grade = "B"
+elif marks >= 70 and marks < 80:
+    grade = "C"
+else:
+    grade = "D"
+
+print(f"Grade of the student is {grade}")
+
+# Example runs:
+# marks=94 → A
+# marks=88 → B
+# marks=67 → D
+```
+
+**Cleaner version using comparisons:**
+
+```python
+if marks >= 90:
+    grade = "A"
+elif marks >= 80:  # No need for "and marks < 90"
+    grade = "B"     # Already know marks < 90 from previous check
+elif marks >= 70:
+    grade = "C"
+else:
+    grade = "D"
+```
+
+---
+
+### 🩺 Clinical Application: Patient Eligibility
+
+```python
+age = int(input("Enter patient age: "))
+has_symptoms = input("Has symptoms? (yes/no): ").lower()
+
+if age >= 18 and age <= 80:
+    if has_symptoms == "yes":
+        print("✅ Eligible for clinical trial")
+        print("Schedule screening appointment")
+    else:
+        print("❌ No symptoms - not eligible")
+else:
+    print("❌ Age outside eligible range (18-80)")
+
+# Example 1: age=45, symptoms=yes → Eligible
+# Example 2: age=85, symptoms=yes → Age outside range
+# Example 3: age=30, symptoms=no → No symptoms
+```
+
+---
+
+### Nested Conditionals
+
+**Nesting** means putting one if statement inside another.
+
+```python
+age = 95
+
+if age >= 18:
+    print("Can drive")
+    
+    if age >= 80:  # Nested inside first if
+        print("Cannot drive")
+    else:
+        print("Can drive")  # This is for age 18-79
+else:
+    print("Cannot drive")  # Under 18
+```
+
+**When to use nesting:** When you need to check a second condition ONLY if the first is True.
+
+---
+
+## 🎯 Practice: Conditional Problems
+
+### Problem 1: Check Odd or Even
+
+```python
+num = int(input("Enter number: "))
+
+if num % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
+
+# Examples:
+# 14 → Even
+# 17 → Odd
+```
+
+**Logic:** Even numbers divide by 2 with remainder 0.
+
+---
+
+### Problem 2: Find Greatest of Three Numbers
+
+```python
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+c = int(input("Enter third number: "))
+
+if a >= b and a >= c:
+    print(f"First is largest: {a}")
+elif b >= c:
+    print(f"Second is largest: {b}")
+else:
+    print(f"Third is largest: {c}")
+
+# Examples:
+# 4, 5, 7 → Third is largest: 7
+# 99, 201, 87 → Second is largest: 201
+```
+
+---
+
+### Problem 3: Check Multiple of 7
+
+```python
+x = int(input("Enter number: "))
+
+if x % 7 == 0:
+    print("Multiple of 7")
+else:
+    print("Not a multiple")
+
+# Examples:
+# 21 → Multiple of 7
+# 16 → Not a multiple
+```
+
+**Logic:** Any multiple of N has remainder 0 when divided by N.
+
+---
+
+## 🔬 Biomedical AI Applications
+
+### 1. DNA Sequence Validation
+
+```python
+dna_sequence = input("Enter DNA sequence: ")
+
+# Check valid bases
+valid = True
+for base in dna_sequence:
+    if base not in "ATCG":
+        valid = False
+        break
+
+if valid and len(dna_sequence) >= 10:
+    print("✅ Valid DNA sequence")
+    
+    # Count GC content
+    gc_count = dna_sequence.count("G") + dna_sequence.count("C")
+    gc_percentage = (gc_count / len(dna_sequence)) * 100
+    
+    if gc_percentage > 60:
+        print(f"⚠️ High GC content: {gc_percentage:.1f}%")
+    else:
+        print(f"GC content: {gc_percentage:.1f}%")
+else:
+    print("❌ Invalid sequence")
+```
+
+---
+
+### 2. Patient Risk Stratification
+
+```python
+age = int(input("Patient age: "))
+blood_pressure = int(input("Systolic BP: "))
+cholesterol = int(input("Cholesterol: "))
+
+risk_score = 0
+
+# Age factor
+if age >= 65:
+    risk_score += 2
+elif age >= 45:
+    risk_score += 1
+
+# BP factor
+if blood_pressure >= 140:
+    risk_score += 2
+elif blood_pressure >= 120:
+    risk_score += 1
+
+# Cholesterol factor
+if cholesterol >= 240:
+    risk_score += 2
+elif cholesterol >= 200:
+    risk_score += 1
+
+# Risk assessment
+if risk_score >= 5:
+    print("⚠️ HIGH RISK - Immediate intervention needed")
+elif risk_score >= 3:
+    print("⚠️ MODERATE RISK - Close monitoring")
+else:
+    print("✅ LOW RISK - Continue routine care")
+
+print(f"Risk score: {risk_score}/6")
+```
+
+---
+
+### 3. Clinical Text Processing
+
+```python
+clinical_note = input("Enter clinical note: ")
+
+# Convert to lowercase for case-insensitive search
+note_lower = clinical_note.lower()
+
+# Keyword detection
+symptoms = []
+
+if "fever" in note_lower:
+    symptoms.append("Fever")
+if "cough" in note_lower:
+    symptoms.append("Cough")
+if "fatigue" in note_lower:
+    symptoms.append("Fatigue")
+if "headache" in note_lower:
+    symptoms.append("Headache")
+
+if len(symptoms) > 0:
+    print(f"Symptoms detected: {', '.join(symptoms)}")
+    
+    # Severity assessment
+    if len(symptoms) >= 3:
+        print("⚠️ Multiple symptoms - Consider comprehensive workup")
+    else:
+        print("Monitor symptoms")
+else:
+    print("No common symptoms detected")
+```
+
+---
+
+## 🚨 Common Beginner Pitfalls to Avoid
+
+### 1. **Forgetting Indentation**
+
+```python
+# ❌ WRONG
+if age >= 18:
+print("Can vote")  # IndentationError!
+
+# ✅ CORRECT
+if age >= 18:
+    print("Can vote")
+```
+
+### 2. **Using = Instead of ==**
+
+```python
+# ❌ WRONG (assignment, not comparison)
+if age = 18:  # SyntaxError!
+
+# ✅ CORRECT
+if age == 18:
+```
+
+### 3. **Forgetting Colon**
+
+```python
+# ❌ WRONG
+if age >= 18  # SyntaxError!
+    print("Can vote")
+
+# ✅ CORRECT
+if age >= 18:
+    print("Can vote")
+```
+
+### 4. **Confusing String and Number Comparison**
+
+```python
+age = input("Enter age: ")  # Returns STRING!
+
+# ❌ WRONG
+if age >= 18:  # Comparing string to number!
+
+# ✅ CORRECT
+age = int(input("Enter age: "))
+if age >= 18:
+```
+
+### 5. **Incorrect Range Checks**
+
+```python
+# ❌ WRONG (Python can't read your mind)
+if 80 <= marks < 90:  # Seems right but confusing
+
+# ✅ CLEAREST
+if marks >= 80 and marks < 90:
+
+# ✅ PYTHONIC (actually works in Python!)
+if 80 <= marks < 90:  # This IS valid in Python!
+```
+
+---
+
+## 💡 Best Practices for Biomedical AI Code
+
+### 1. **Validate Input Data**
+
+```python
+# Always check data before processing
+sequence = input("Enter DNA: ")
+
+if not sequence:
+    print("Error: Empty sequence")
+elif len(sequence) < 10:
+    print("Error: Sequence too short")
+elif not all(base in "ATCG" for base in sequence):
+    print("Error: Invalid bases")
+else:
+    # Process valid sequence
+    print("Processing...")
+```
+
+### 2. **Use Descriptive Variable Names**
+
+```python
+# ❌ BAD
+if x > 18 and y < 140:
+    z = "low"
+
+# ✅ GOOD
+if patient_age > 18 and systolic_bp < 140:
+    risk_level = "low"
+```
+
+### 3. **Comment Complex Logic**
+
+```python
+# Check if patient meets trial inclusion criteria
+if (age >= 18 and age <= 65 and           # Age range
+    not has_prior_treatment and            # Treatment-naive
+    egfr_score >= 60):                     # Kidney function OK
+    
+    eligible = True
+```
+
+### 4. **Use String Methods for Robustness**
+
+```python
+# Handle case variations
+user_input = input("Continue? (yes/no): ")
+
+# ❌ FRAGILE
+if user_input == "yes":
+
+# ✅ ROBUST
+if user_input.lower().strip() == "yes":
+    # Handles "Yes", "YES", " yes ", etc.
+```
+
+---
+
+## 🎯 What You Just Learned
+
+### ✅ New Concepts Mastered:
+
+1. **String fundamentals**: Creation, quotes, escape sequences
+2. **String operations**: Concatenation, length, methods
+3. **Indexing**: Accessing characters (positive/negative)
+4. **Slicing**: Extracting subsequences with `[start:end]`
+5. **String methods**: `find()`, `count()`, `replace()`, `endswith()`, etc.
+6. **Conditionals**: `if`, `elif`, `else` structure
+7. **Operators**: Comparison (`==`, `>`, etc.) and logical (`and`, `or`, `not`)
+8. **Indentation**: Python's way of grouping code
+9.
